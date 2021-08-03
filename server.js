@@ -12,28 +12,38 @@ app.use(cors());
 // a server endpoint
 app.get('/weather', // our endpoint name
   function (req, res) {
-
+    console.log(req.query);
     let searchQuery = req.query.searchQuery;
-    let lat = req.query.lat;
-    let lon = req.query.lon;
+    let lat = Number (req.query.lat);
+    let lon = Number(req.query.lon);
     console.log(searchQuery,lat,lon);
 
+    try{
+      let cityArray = Weather.find(element => element.city_name.toLowerCase() === searchQuery.toLowerCase());
 
-    let cityArray = Weather.find(element => element.city_name === searchQuery);
-
-    class Forecast{
-      constructor(object){
-        this.date = object.datetime;
-        this.description = object.description;
+      class Forecast{
+        constructor(object){
+          this.date = object.datetime;
+          this.description = object.description;
+        }
       }
+      console.log(cityArray);
+      let cityArr =cityArray.data.map((element) =>{
+        console.log(element.datetime);
+        //key inside of the forecast instance must be written the same way it is shown in the weather.json;
+        return (new Forecast({datetime:element.datetime, description:`Low of ${element.low_temp}, high of ${element.high_temp} with ${element.weather.description}`} ));
+      });
+      res.send(cityArr);
+
+    }catch(e){
+      res.status(500).send('invalid data entered');
+
     }
-    let cityArr = [];
-    cityArray.Weather.map((element) =>{
-      return cityArr.push(new Forecast(element.datetime, `Low of ${element.low_temp}, high of ${element.high_temp} with ${element.weather.description}`));
-    });
 
 
-    res.send(cityArray);
+
+
+
 
     // callback function of what we should do with our request
   });
