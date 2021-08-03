@@ -1,11 +1,18 @@
 const express = require('express'); // require the express package
 const cors = require('cors');
+const axios = require('axios');
 const Weather = require('./data/weather.json');
+const weather= require('./models/Weather');
 
 require('dotenv').config();
 const app = express(); // initialize your express app instance
 
 const PORT = process.env.PORT;
+const WEATHERBIT_KEY = process.env.WEATHERBIT_KEY;
+const WEATHERBIT_URL = process.env.WEATHERBIT_URL;
+const MOVIE_API_URL = process.env.MOVIE_API_URL;
+const MOVIE_API_KEY = process.env.MOVIE_API_KEY;
+
 app.use(cors());
 
 
@@ -39,14 +46,22 @@ app.get('/weather', // our endpoint name
       res.status(500).send('invalid data entered');
 
     }
-
-
-
-
-
-
     // callback function of what we should do with our request
   });
+// weatherbit api here.
+app.get('/weatherbit',async (res,req) =>{
+
+  const {latitude,longitude} = req.query;
+  const response = await axios.get(`${WEATHERBIT_URL}?key=${WEATHERBIT_KEY}&lat=${latitude}&${longitude}`);
+  const data = response.data.data.map(element => new Weather(element));
+  res.json(data);
+
+});
+app.get('/movie', async (res,req) =>{
+  const responseMovie = await axios.get(`${MOVIE_API_URL}?key=${MOVIE_API_KEY}`);
+  res.json(responseMovie);
+
+});
 
 
 app.listen(PORT, () => {
