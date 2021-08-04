@@ -9,8 +9,11 @@ const PORT = process.env.PORT;
 app.use(cors());
 
 
+
 // a weather.json file
 app.get('/weather', jsonWeatherFunction);
+
+
 // weatherbit api here.
 app.get('/weather-bit', weatherFunction);
 // Movie api here
