@@ -16,7 +16,7 @@ const MOVIE_API_KEY = process.env.MOVIE_API_KEY;
 
 app.use(cors());
 
-
+// some notes;
 // a server endpoint
 app.get('/weather', // our endpoint name
   function (req, res) {
