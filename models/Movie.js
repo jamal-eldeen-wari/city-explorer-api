@@ -1,14 +1,13 @@
 class Movie{
-  constructor(data){
-    this.title = data.title;
-    this.overview = data.overview;
-    this.average_votes = data.average_votes;
-    this.total_votes = data.total_votes;
-    this.image_url = data.image_url;
-    this.popularity = data.popularity;
-    this.released_on = data.released_on;
-
+  constructor(object){
+    this.title = object.title;
+    this.overview = object.overview;
+    this.average_votes = object.average_votes;
+    this.total_votes = object.total_votes;
+    this.image_url = 'https://image.tmdb.org/t/p/w500'+object.poster_path;
+    this.popularity = object.popularity;
+    this.released_on = object.released_on;
   }
+
 }
 module.exports = Movie;
-
